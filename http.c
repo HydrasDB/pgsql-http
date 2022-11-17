@@ -373,6 +373,18 @@ void http_read_curlopt_config_file(const char *newval, void* extra)
 	char*  newline;
 	size_t i;
 
+	// no setting -> clear any values we set (probably no-op)
+	if (newval == NULL) {
+		for(i = 0;;) {
+			http_curlopt *opt = settable_curlopts + i++;
+			if (!opt->curlopt_str) return;
+			if (opt->from_curlopt_config_file) {
+				opt->from_curlopt_config_file = false;
+				if (opt->curlopt_val) pfree(opt->curlopt_val);
+			}
+		}
+	}
+
 	file = fopen(newval, "r");
 	if (file == NULL) {
 		elog(FATAL, "Unable to open curlopt_config_file '%s'", newval);
