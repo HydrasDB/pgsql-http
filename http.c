@@ -404,7 +404,7 @@ void http_read_curlopt_config_file(const char *newval, void* extra)
 		value += 1;
 
 		// remove the newline if there is one
-		if ((newline = strchr(line, '\n')) != NULL) {
+		if ((newline = strchr(value, '\n')) != NULL) {
 			*newline = '\0';
 		}
 
